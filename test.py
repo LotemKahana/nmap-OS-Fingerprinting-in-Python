@@ -9,8 +9,6 @@ open_port = 22
 closed_port = 999
 
 
-
-
 def perform_t_test(ttl, hops):
     return ttl + hops
 
@@ -25,20 +23,12 @@ def perform_tg_test(ttl):
 def main():
     
     responses = send_probes()
-    sg_syn = extract_syn(responses["sg_responces"])
-    sg_id = extract_ip_id(responses["sg_responces"])
-    sg_ts = extract_time(responses["sg_responces"])
-    sg_options = extract_tcp_options(responses["sg_responces"])
-    sg_windows = extract_tcp_windows(responses["sg_responces"])
-    u_ttl = extract_udp_response_ttl(responses["u_responses"])
-    t_id = extract_ip_id(responses["t_responses"])
-    t_closed_id = t_id[3:]
-    ie_id = extract_ip_id(responses["ie_results"])
-
 
     seq = seq_test(responses)
 
-    ops = ops_test([generate_option_string(option) for option in sg_options])
+    ops = ops_test(responses)
+    win = win_test(responses)
+    ecn = ecn_test(responses)
     hops = u_ttl[0] - u_ttl[1] # number of hops away (ttl)
     print(gcd, isr, sp, "\n", ti, ci, ii, ss)
 # Run the main function
