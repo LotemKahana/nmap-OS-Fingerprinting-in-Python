@@ -21,13 +21,14 @@ def build_ip(ttl=None, tos=None, df=None):
     return probe
 
 def send_receive_packet(packet, packet_num, response_queue):
-    response = sr1(packet, timeout=2, verbose=False)
+    response = sr1(packet, timeout=4, verbose=False)
     response_queue.put((packet_num, response))
 
 def send_recive_udp_packet(packet):
     send(packet, count=1)
     res = sniff(filter=f"icmp and host {dst_ip}", prn=handle_icmp_response, timeout=2)
-    return res.res[0]
+    if len(res) != 0:
+        return res.res[0]
 
 def handle_icmp_response(packet):
     if packet and packet.haslayer(ICMP) and packet[ICMP].type == 3 and packet[ICMP].code == 3:
