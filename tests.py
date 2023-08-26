@@ -28,13 +28,12 @@ def win_test(probes):
 def ecn_test(probes):
     ecn_answer = probes["ecn_response"]
     test = dict()
-    if utils.r_test(ecn_answer):
-        test["R"] = "Y"
-    else:
-        test["R"] = "N"
-        return
+    test["R"] = utils.r_test(ecn_answer)
+    if test["R"] == "N":
+        return test
     ecn_answer = ecn_answer[0] # strip list
-    if utils.df_test(ecn_answer):
-        test["DF"] = "Y"
-    else:
-        test["DF"] = "N"
+    test["DF"] = utils.df_test(ecn_answer)
+    test["T"] = utils.t_test(ecn_answer.ttl, probes["u_responses"])
+    test["TG"] = utils.tg_test(ecn_answer.ttl)
+    test["CC"] = utils.cc_test(ecn_answer)
+    test["Q"] = utils.q_test(ecn_answer)

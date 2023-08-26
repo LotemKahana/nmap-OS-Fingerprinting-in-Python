@@ -7,7 +7,7 @@ dst_ip = '45.33.32.156'
 open_port = 22
 closed_port = 999
 
-def build_ip(ttl=None, tos=None, df=None):
+def build_ip(ttl=None, tos=None, df=None, id=None):
     probe = IP(dst=dst_ip)
     if tos is not None:
         probe.tos = tos
@@ -18,6 +18,8 @@ def build_ip(ttl=None, tos=None, df=None):
             probe.ttl=ttl
         if ttl=='r':
             probe.ttl=randint(23,60)
+    if id is not None:
+        probe.id=id
     return probe
 
 def send_receive_packet(packet, packet_num, response_queue):
@@ -71,9 +73,11 @@ def send_probes(ttl='r'):
         build_ip(ttl=ttl)/build_tcp(dest_port=open_port, window=512, flags="S", options=[('MSS', 265), ('SAckOK', ''), ('Timestamp', (0xFFFFFFFF, 0))])
     ]
 
+    ie_id = RandShort()
+    ie_p_id = RandShort()
     ie_packets = [
-        build_ip(ttl=ttl)/ICMP(type='echo-request', code=9, id=RandShort()) / Raw(load=b'\x00' * 120),
-        build_ip(tos=4, ttl=ttl)/ICMP(type='echo-request', code=0, id=RandShort()) / Raw(load=b'\x00' * 150)
+        build_ip(tos=0, df=True, ttl=ttl, id=ie_p_id)/ICMP(type='echo-request', code=9, id=ie_id, seq=295) / Raw(load=b'\x00' * 120),
+        build_ip(tos=4, ttl=ttl, id=ie_p_id+1)/ICMP(type='echo-request', code=0, id=ie_id+1) / Raw(load=b'\x00' * 150)
     ]
 
     ecn_packets = [

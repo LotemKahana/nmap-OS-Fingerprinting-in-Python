@@ -57,12 +57,11 @@ def extract_seq(probes):
     sg_id = extract_ip_id(probes["sg_responces"])
     sg_ts = extract_time(probes["sg_responces"])
     sg_windows = extract_tcp_windows(probes["sg_responces"])
-    u_ttl = extract_udp_response_ttl(probes["u_responses"])
     t_id = extract_ip_id(probes["t_responses"])
     t_closed_id = t_id[3:]
     ie_id = extract_ip_id(probes["ie_results"])
     return {"sg_syn":sg_syn, "sg_id":sg_id, "sg_ts":sg_ts, "sg_windows":sg_windows,
-             "u_ttl":u_ttl, "t_id":t_id, "t_closed_id":t_closed_id,"ie_id":ie_id}
+            "t_id":t_id, "t_closed_id":t_closed_id,"ie_id":ie_id}
 
 def extract_ops(probes):
     sg_options = extract_tcp_options(probes["sg_responces"])
