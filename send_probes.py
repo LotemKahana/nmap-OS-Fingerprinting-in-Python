@@ -4,7 +4,7 @@ import threading
 import queue
 
 dst_ip = '45.33.32.156'
-open_port = 22
+open_port = 80
 closed_port = 999
 
 def build_ip(ttl=None, tos=None, df=None, id=None):
@@ -23,14 +23,14 @@ def build_ip(ttl=None, tos=None, df=None, id=None):
     return probe
 
 def send_receive_packet(packet, packet_num, response_queue):
-    response = sr1(packet, timeout=4, verbose=False)
+    response = sr1(packet, timeout=6, verbose=False)
     response_queue.put((packet_num, response))
 
 def send_recive_udp_packet(packet):
     send(packet, count=1)
-    res = sniff(filter=f"icmp and host {dst_ip}", prn=handle_icmp_response, timeout=2)
+    res = sniff(filter=f"icmp and host {dst_ip}", prn=handle_icmp_response, timeout=6)
     if len(res) != 0:
-        return res.res[0]
+        return res.res[0].payload
 
 def handle_icmp_response(packet):
     if packet and packet.haslayer(ICMP) and packet[ICMP].type == 3 and packet[ICMP].code == 3:
@@ -95,15 +95,15 @@ def send_probes(ttl='r'):
         build_ip(ttl=ttl)/build_tcp(dest_port=closed_port, window=65535, flags="FSUP", options=[('WScale', 10), ('NOP', None), ('MSS', 265), ('Timestamp', (0xFFFFFFFF, 0)), ('SAckOK', '')])
     ]
 
-    u_packet = build_ip(ttl=ttl)/UDP(sport=randint(1024, 49151), dport=closed_port)/(b'\x43' * 300)
+    u_packet = build_ip(ttl=ttl, id=0x1042)/UDP(sport=randint(1024, 49151), dport=closed_port)/(b'\x43' * 300)
 
-    sg_responces = send_packets(sg_packets, 0.1)
-    ie_responces = send_packets(ie_packets, 0)
-    ecn_response = send_packets(ecn_packets, 0)
-    t_responses = send_packets(t_packets, 0)
-    u_responses = send_recive_udp_packet(u_packet)
+    sg_responces = (send_packets(sg_packets, 0.1), sg_packets)
+    ie_responces = (send_packets(ie_packets, 0), ie_packets)
+    ecn_response = (send_packets(ecn_packets, 0), ecn_packets)
+    t_responses = (send_packets(t_packets, 0), t_packets)
+    u_responses = (send_recive_udp_packet(u_packet), u_packet)
 
-    return {"sg_responces":sg_responces, "ie_results":ie_responces, "ecn_response":ecn_response, "t_responses":t_responses, "u_responses":(u_responses, u_packet[IP].ttl)}
+    return {"sg":sg_responces, "ie":ie_responces, "ecn":ecn_response, "t":t_responses, "u":u_responses}
 
 def build_tcp(dest_port, window, flags, options):
     sport = randint(1024, 49151)
