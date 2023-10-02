@@ -1,7 +1,7 @@
 import math
 import zlib
 from statistics import stdev
-import test_support
+import os_detection.test_support as test_support
 from constants import *
 
 def gcd_test(sg_syn):

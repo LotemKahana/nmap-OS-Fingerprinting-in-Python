@@ -1,8 +1,4 @@
-import sys
-import os
-
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-from parse_os_db import get_os_fingerprints_from_db
+from os_db.parse_os_db import get_os_fingerprints_from_db
 from constants import *
 
 def find_os(fingerprint, number_of_os_match):

@@ -1,5 +1,5 @@
-ttl_min = 23
-ttl_max = 60
+TTL_MIN = 23
+TTL_MAX = 60
 
 MAX_TTL = 255
 
@@ -34,6 +34,7 @@ NUMBER_OF_TESTS = 13
 
 TOP_MATCHING_OS = 3
 
+EXTERNAL_FILES_DICT = "external_files"
 PORT_LIST_FILE = "ports.pkl"
 NMAP_DB_FILE = "nmap-os-db.txt"
 

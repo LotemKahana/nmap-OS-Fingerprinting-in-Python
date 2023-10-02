@@ -7,7 +7,7 @@ def get_os_db_data():
     """Read the db file"""
     parent_dir = Path(os.path.dirname(os.path.realpath(__file__)))
     nmap_db_path = os.path.join(str(parent_dir), NMAP_DB_FILE)
-
+    nmap_db_path = os.path.join(EXTERNAL_FILES_DICT, NMAP_DB_FILE)
     with open(nmap_db_path) as os_db:
         data = os_db.read().splitlines()
     return data

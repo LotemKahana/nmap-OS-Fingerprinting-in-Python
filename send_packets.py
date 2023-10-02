@@ -1,4 +1,3 @@
-import contextlib
 import threading
 import queue
 from scapy.all import *

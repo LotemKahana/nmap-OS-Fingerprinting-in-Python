@@ -18,6 +18,7 @@ def get_ports():
     """get a list of ports from a pre existing pkl file"""
     parent_dir = Path(os.path.dirname(os.path.realpath(__file__)))
     ports_path = os.path.join(str(parent_dir), PORT_LIST_FILE)
+    ports_path = os.path.join(EXTERNAL_FILES_DICT, PORT_LIST_FILE)
     with open(ports_path, "rb") as p:
         ports = pickle.load(p)
     return ports

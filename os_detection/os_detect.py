@@ -1,9 +1,6 @@
-import sys
-import os
+from os_detection.tests import *
+import os_detection.send_probes as send_probes
 
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-from tests import *
-from send_probes import send_probes
 
 def do_tests(responses):
     """run all tests on a dictionary of responces"""
@@ -26,5 +23,5 @@ def do_tests(responses):
 
 def get_os_info(dst_ip, open_port, closed_port):
     """get info on os, from destinaton ip, an open port and a closed one."""
-    responses = send_probes(dst_ip, open_port, closed_port)
+    responses = send_probes.send_probes(dst_ip, open_port, closed_port)
     return do_tests(responses)

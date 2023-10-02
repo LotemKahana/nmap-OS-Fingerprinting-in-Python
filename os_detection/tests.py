@@ -1,5 +1,5 @@
-import utils
-from response_extractor import extract_seq, extract_ops, extract_win # # special data extractors for tests with many probes
+import os_detection.utils as utils
+from os_detection.response_extractor import extract_seq, extract_ops, extract_win # special data extractors for tests with many probes
 
 def init_tests(responces):
     """calculate the network distance to initiate the t test"""
