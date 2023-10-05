@@ -80,5 +80,5 @@ echo "Finished copying files."
 echo "The application is installed in: $INSTALL_DIR"
 
 echo "Finished copying files."
-echo "Make sure you keep all files in the \"dist\" folder together."
-./dist/os_detect --help
+echo -e "\033[0;32mMake sure you keep all files in the \"dist\" folder together.\033[0m" # \033[0;32m - green \033[0m - no colour
+"$INSTALL_DIR"/os_detect --help
